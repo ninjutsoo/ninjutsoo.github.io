@@ -72,7 +72,7 @@ Replace `headshot.jpg`, generate a fresh optimized copy at `public/assets/images
 
 ## GitHub Pages Deployment
 
-The workflow in `.github/workflows/deploy.yml` builds the static Astro site on pushes to `main` and deploys `dist` to GitHub Pages. For the clean root URL, the GitHub repository must be named `ninjutsoo.github.io`. The configured production URL is:
+The workflow in `.github/workflows/deploy.yml` builds the static Astro site on pushes to `main` and publishes `dist` to the `master` branch, which GitHub Pages serves for this repository. Source code stays on `main`; `master` contains only the built site. For the clean root URL, the GitHub repository must be named `ninjutsoo.github.io`. The configured production URL is:
 
 ```text
 https://ninjutsoo.github.io/
