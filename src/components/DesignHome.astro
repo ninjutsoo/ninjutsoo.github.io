@@ -1,0 +1,546 @@
+---
+import { getCollection } from "astro:content";
+import { profile } from "@/data/profile";
+import { sitePath } from "@/utils/paths";
+
+interface Props {
+  variant: "academic" | "modern" | "editorial" | "experimental";
+}
+
+const { variant } = Astro.props;
+const publications = (await getCollection("publications")).sort(
+  (a, b) => b.data.year - a.data.year,
+);
+const projects = (await getCollection("projects")).sort((a, b) =>
+  Number(b.data.featured) - Number(a.data.featured),
+);
+const events = (await getCollection("events")).sort((a, b) =>
+  a.data.title.localeCompare(b.data.title),
+);
+
+const variantLabel = {
+  academic: "Refined Academic",
+  modern: "Modern AI Researcher",
+  editorial: "Editorial Research",
+  experimental: "Modern Experimental",
+}[variant];
+
+const linkFor = (pub: (typeof publications)[number]) =>
+  [
+    ["Paper", pub.data.pdf],
+    ["Publisher", pub.data.publisher],
+    ["DOI", pub.data.doi ? `https://doi.org/${pub.data.doi}` : undefined],
+    ["arXiv", pub.data.arxiv],
+    ["PubMed", pub.data.pubmed],
+    ["Code", pub.data.code],
+  ].filter(([, url]) => Boolean(url));
+
+const primaryProfiles = profile.profiles.filter((link) =>
+  ["Google Scholar", "GitHub", "LinkedIn", "ORCID"].includes(link.label),
+);
+const emailCodepoints = profile.emailCodepoints.join(",");
+---
+
+<div class:list={["design-page", `theme-${variant}`]}>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">{variantLabel}</p>
+        <h1>{profile.name}</h1>
+        <p class="hero-subtitle">Trustworthy AI, clinical NLP, and language-model safety.</p>
+        <p class="hero-note">{profile.bio}</p>
+        <div class="button-row">
+          <a class="pill-link primary" href={sitePath(profile.cv)}>CV</a>
+          <button class="pill-link contact-reveal" type="button" data-contact={emailCodepoints}>
+            Email
+          </button>
+          {primaryProfiles.map((link) => (
+            <a class="pill-link" href={link.url}>{link.label.replace("Google ", "")}</a>
+          ))}
+        </div>
+      </div>
+      <figure class="portrait-wrap">
+        <img
+          src={sitePath(profile.headshot)}
+          alt="Portrait of Mohammad Amin Roshani"
+          width="960"
+          height="1280"
+          loading="eager"
+        />
+      </figure>
+    </div>
+  </section>
+
+  <section id="research" class="section">
+    <div class="container research-strip">
+      <div>
+        <p class="eyebrow">Research</p>
+        <h2>AI systems for high-stakes health and safety settings.</h2>
+      </div>
+      <div class="chips">
+        {profile.interests.map((interest) => <span class="chip">{interest}</span>)}
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="section compact-section">
+    <div class="container section-heading">
+      <p class="eyebrow">Selected Work</p>
+      <h2>Current threads</h2>
+    </div>
+    <div class="container work-grid">
+      {projects.slice(0, 3).map((project) => (
+        <article class="work-card card">
+          {project.data.images[0] && (
+            <img src={sitePath(project.data.images[0])} alt={`Image related to ${project.data.title}`} loading="lazy" />
+          )}
+          <div>
+            <p class="meta">{project.data.status}</p>
+            <h3>{project.data.title}</h3>
+            <p>{project.data.shortDescription}</p>
+            <div class="mini-links">
+              {project.data.externalLinks.map((link) => (
+                <a href={link.url}>{link.label}</a>
+              ))}
+              {project.data.repositories.map((link) => (
+                <a href={link.url}>{link.label}</a>
+              ))}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="publications" class="section publication-band">
+    <div class="container section-heading inline-heading">
+      <div>
+        <p class="eyebrow">Publications</p>
+        <h2>Recent papers</h2>
+      </div>
+      <a class="text-link" href={profile.profiles.find((link) => link.label === "Google Scholar")?.url}>Google Scholar</a>
+    </div>
+    <div class="container publication-list">
+      {publications.map((pub) => (
+        <article class="publication">
+          <div class="pub-year">{pub.data.year}</div>
+          <div class="pub-main">
+            <p class="meta">{pub.data.venue} · {pub.data.status}</p>
+            <h3>{pub.data.title}</h3>
+          </div>
+          <div class="pub-links">
+            {linkFor(pub).slice(0, 4).map(([label, url]) => (
+              <a href={url}>{label}</a>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section id="activities" class="section compact-section">
+    <div class="container section-heading">
+      <p class="eyebrow">Activities</p>
+      <h2>Selected moments</h2>
+    </div>
+    <div class="container event-grid">
+      {events.map((event) => (
+        <article class="event-card card">
+          {event.data.images[0] && (
+            <img src={sitePath(event.data.images[0])} alt={`Image related to ${event.data.title}`} loading="lazy" />
+          )}
+          <div>
+            <p class="meta">{event.data.eventType}</p>
+            <h3>{event.data.title}</h3>
+            <p>{event.data.role}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section bio-band">
+    <div class="container bio-grid">
+      <div>
+        <p class="eyebrow">Background</p>
+        <h2>Wayne State CS PhD student in the Trustworthy AI Lab.</h2>
+      </div>
+      <div class="bio-list">
+        <p><strong>Education</strong> PhD in Computer Science, Wayne State University.</p>
+        <p><strong>Teaching</strong> GTA and instructor roles across programming, web technology, capstone, and trustworthy AI.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact" class="footer">
+    <div class="container footer-grid">
+      <div>
+        <p class="eyebrow">Contact</p>
+        <h2>Research, collaboration, and academic inquiries.</h2>
+      </div>
+      <div class="button-row">
+        <button class="pill-link primary contact-reveal" type="button" data-contact={emailCodepoints}>
+          Email
+        </button>
+        <a class="pill-link" href={sitePath(profile.cv)}>Download CV</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  for (const button of document.querySelectorAll<HTMLButtonElement>(".contact-reveal")) {
+    button.addEventListener("click", () => {
+      const contact = button.dataset.contact;
+      if (!contact) return;
+      const address = contact
+        .split(",")
+        .map((code) => String.fromCharCode(Number(code)))
+        .join("");
+      const scheme = ["m", "a", "i", "l", "t", "o", ":"].join("");
+      window.location.href = `${scheme}${address}`;
+    });
+  }
+</script>
+
+<style>
+  .design-page {
+    --hero-max: 4.7rem;
+    --radius: 8px;
+  }
+
+  h1,
+  h2,
+  h3,
+  p {
+    margin-top: 0;
+  }
+
+  h1,
+  h2,
+  h3 {
+    letter-spacing: 0;
+  }
+
+  h1 {
+    max-width: 11ch;
+    margin-bottom: 1rem;
+    font-size: clamp(3.1rem, 7vw, var(--hero-max));
+    font-weight: 760;
+    line-height: 0.98;
+  }
+
+  h2 {
+    max-width: 15ch;
+    margin-bottom: 0;
+    font-size: clamp(1.75rem, 4vw, 2.8rem);
+    font-weight: 720;
+    line-height: 1.08;
+  }
+
+  h3 {
+    margin-bottom: 0.4rem;
+    font-size: 1.08rem;
+    font-weight: 720;
+    line-height: 1.25;
+  }
+
+  .hero {
+    min-height: calc(100vh - 72px);
+    display: grid;
+    align-items: center;
+    padding-block: clamp(42px, 7vw, 84px);
+  }
+
+  .hero-grid,
+  .research-strip,
+  .bio-grid,
+  .footer-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(300px, 0.75fr);
+    gap: clamp(1.6rem, 6vw, 5rem);
+    align-items: center;
+  }
+
+  .hero-subtitle {
+    max-width: 650px;
+    margin-bottom: 1rem;
+    color: var(--ink);
+    font-size: clamp(1.35rem, 2.5vw, 2rem);
+    font-weight: 520;
+    line-height: 1.22;
+  }
+
+  .hero-note {
+    max-width: 560px;
+    margin-bottom: 1.5rem;
+    color: var(--muted);
+    font-size: 1.02rem;
+  }
+
+  .portrait-wrap {
+    margin: 0;
+  }
+
+  .portrait-wrap img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: var(--radius);
+    box-shadow: 0 24px 80px color-mix(in srgb, var(--ink) 16%, transparent);
+  }
+
+  .section {
+    padding-block: clamp(46px, 7vw, 82px);
+  }
+
+  .compact-section {
+    padding-top: clamp(32px, 5vw, 58px);
+  }
+
+  .section-heading {
+    margin-bottom: 1.3rem;
+  }
+
+  .inline-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .research-strip {
+    border-block: 1px solid var(--line);
+    padding-block: clamp(28px, 5vw, 46px);
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+  }
+
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .work-card {
+    overflow: hidden;
+  }
+
+  .work-card img {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+  }
+
+  .work-card > div,
+  .event-card > div {
+    padding: 1rem;
+  }
+
+  .work-card p:not(.meta),
+  .event-card p:not(.meta) {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .mini-links,
+  .pub-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 0.9rem;
+  }
+
+  .mini-links a,
+  .pub-links a,
+  .text-link {
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 720;
+    text-decoration: none;
+  }
+
+  .publication-band {
+    background: color-mix(in srgb, var(--panel) 58%, var(--paper));
+  }
+
+  .publication-list {
+    display: grid;
+    border-top: 1px solid var(--line);
+  }
+
+  .publication {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) minmax(180px, auto);
+    gap: 1.2rem;
+    align-items: start;
+    border-bottom: 1px solid var(--line);
+    padding-block: 1rem;
+  }
+
+  .pub-year {
+    color: var(--accent);
+    font-weight: 760;
+  }
+
+  .pub-main h3 {
+    max-width: 780px;
+    margin-bottom: 0;
+  }
+
+  .pub-links {
+    justify-content: flex-end;
+    margin-top: 0.15rem;
+  }
+
+  .event-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .event-card {
+    overflow: hidden;
+  }
+
+  .event-card img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+  }
+
+  .bio-band {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .bio-list {
+    display: grid;
+    gap: 0.75rem;
+    color: var(--muted);
+  }
+
+  .bio-list p {
+    margin-bottom: 0;
+  }
+
+  .bio-list strong {
+    color: var(--ink);
+    margin-right: 0.4rem;
+  }
+
+  .footer {
+    padding-block: clamp(42px, 7vw, 76px);
+  }
+
+  .theme-academic {
+    --paper: #fbfcfd;
+    --panel: #ffffff;
+    --ink: #101820;
+    --muted: #5a6673;
+    --line: #dde5ec;
+    --accent: #0f766e;
+  }
+
+  .theme-modern {
+    --paper: #f6f8fb;
+    --panel: #ffffff;
+    --ink: #0b1220;
+    --muted: #526173;
+    --line: #d8e1ea;
+    --accent: #1d4ed8;
+  }
+
+  .theme-modern .hero {
+    background:
+      linear-gradient(135deg, rgba(29, 78, 216, 0.08), transparent 38%),
+      linear-gradient(315deg, rgba(15, 118, 110, 0.08), transparent 38%);
+  }
+
+  .theme-modern .card {
+    box-shadow: 0 18px 54px rgba(15, 23, 42, 0.07);
+  }
+
+  .theme-editorial {
+    --paper: #faf9f6;
+    --panel: #ffffff;
+    --ink: #151923;
+    --muted: #5f6670;
+    --line: #ded9cf;
+    --accent: #8b1e3f;
+    --hero-max: 5.1rem;
+  }
+
+  .theme-editorial .hero-grid {
+    grid-template-columns: minmax(300px, 0.78fr) minmax(0, 1fr);
+  }
+
+  .theme-editorial .portrait-wrap {
+    order: -1;
+  }
+
+  .theme-editorial .portrait-wrap img {
+    aspect-ratio: 5 / 6;
+  }
+
+  .theme-experimental {
+    --paper: #f7fbfc;
+    --panel: #ffffff;
+    --ink: #071018;
+    --muted: #526879;
+    --line: #d3e2e8;
+    --accent: #0e7490;
+    --hero-max: 4.9rem;
+  }
+
+  .theme-experimental .hero-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.65fr);
+  }
+
+  .theme-experimental .portrait-wrap img {
+    border-radius: 42% 42% var(--radius) var(--radius);
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      min-height: auto;
+    }
+
+    .hero-grid,
+    .research-strip,
+    .bio-grid,
+    .footer-grid,
+    .theme-editorial .hero-grid,
+    .theme-experimental .hero-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .theme-editorial .portrait-wrap {
+      order: initial;
+    }
+
+    .work-grid,
+    .event-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .publication {
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
+    }
+
+    .pub-links {
+      justify-content: flex-start;
+    }
+
+    h2 {
+      max-width: 18ch;
+    }
+  }
+</style>

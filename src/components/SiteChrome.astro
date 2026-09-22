@@ -1,0 +1,98 @@
+---
+import { profile } from "@/data/profile";
+import { sitePath } from "@/utils/paths";
+
+const navItems = [
+  ["Research", "#research"],
+  ["Projects", "#projects"],
+  ["Publications", "#publications"],
+  ["Activities", "#activities"],
+];
+---
+
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <nav class="container nav" aria-label="Primary navigation">
+    <a class="brand" href={sitePath("/designs/academic")} aria-label={`${profile.name} home`}>
+      <span>MAR</span>
+    </a>
+    <div class="nav-links">
+      {navItems.map(([label, href]) => <a href={href}>{label}</a>)}
+      <a class="cv-link" href={sitePath(profile.cv)}>CV</a>
+    </div>
+  </nav>
+</header>
+
+<slot />
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    border-bottom: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(14px);
+  }
+
+  .nav {
+    display: flex;
+    min-height: 64px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .brand {
+    display: inline-grid;
+    width: 40px;
+    height: 40px;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--ink);
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 760;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem 0.9rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 650;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+
+  .nav-links a:hover {
+    color: var(--ink);
+  }
+
+  .cv-link {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.32rem 0.72rem;
+    color: var(--ink);
+  }
+
+  @media (max-width: 760px) {
+    .nav {
+      align-items: flex-start;
+      flex-direction: column;
+      padding-block: 0.8rem;
+    }
+
+    .nav-links {
+      justify-content: flex-start;
+    }
+  }
+</style>

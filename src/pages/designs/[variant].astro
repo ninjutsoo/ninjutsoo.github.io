@@ -1,0 +1,26 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import DesignHome from "@/components/DesignHome.astro";
+import { profile } from "@/data/profile";
+
+export function getStaticPaths() {
+  return ["academic", "modern", "editorial", "experimental"].map((variant) => ({
+    params: { variant },
+  }));
+}
+
+const variant = Astro.params.variant as "academic" | "modern" | "editorial" | "experimental";
+const labels = {
+  academic: "Refined Academic",
+  modern: "Modern AI Researcher",
+  editorial: "Editorial Research",
+  experimental: "Modern Experimental",
+};
+---
+
+<BaseLayout
+  title={`${profile.name} | ${labels[variant]} Website Preview`}
+  description={`A ${labels[variant].toLowerCase()} homepage concept for ${profile.name}'s academic website.`}
+>
+  <DesignHome variant={variant} />
+</BaseLayout>
