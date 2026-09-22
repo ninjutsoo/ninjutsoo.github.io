@@ -1,5 +1,9 @@
 ---
-import { sitePath } from "@/utils/paths";
-
-return Astro.redirect(sitePath("/designs/academic"));
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import DesignHome from "@/components/DesignHome.astro";
+import { profile } from "@/data/profile";
 ---
+
+<BaseLayout title={`${profile.name} | Computer Science PhD Student`} description={profile.bio}>
+  <DesignHome variant="academic" />
+</BaseLayout>
