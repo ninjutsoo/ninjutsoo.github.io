@@ -19,7 +19,7 @@ dblp: "https://dblp.org/rec/journals/corr/abs-2409-15027"
 pdf: "https://ai.jmir.org/2025/1/e67363/PDF"
 project: "covid-risk-assessment"
 featured: true
-abstract: "A conversational AI application for personalized COVID-19 severity risk assessment using generative large language models, with patient and clinician workflows and attention-based feature importance."
+abstract: "Conversational app for COVID-19 severity risk assessment with generative LLMs, patient and clinician workflows, and attention-based feature importance."
 bibtex: |
   @article{roshani2025generative,
     title={Generative Large Language Model-Powered Conversational AI App for Personalized Risk Assessment: Case Study in COVID-19},

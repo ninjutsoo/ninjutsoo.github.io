@@ -3,7 +3,7 @@ title: "Industry Day on AI"
 eventType: "Poster presentation"
 organization: "Wayne State University"
 role: "Presenter"
-description: "Presented the JMIR AI paper on LLM-powered conversational risk assessment while representing the Trustworthy AI Lab and connecting with academic and industry AI professionals."
+description: "Poster on the JMIR AI COVID-19 risk assessment paper at Wayne State Industry Day on AI."
 relatedProject: "covid-risk-assessment"
 relatedPublication: "jmir-covid-risk"
 images:

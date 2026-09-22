@@ -9,7 +9,7 @@ export const profile = {
   cv: "/assets/documents/Mohammad-Amin-Roshani-CV.pdf",
   headshot: "/assets/images/headshot.webp",
   bio:
-    "PhD student at Wayne State University developing trustworthy generative and agentic AI for clinical and biomedical decision support.",
+    "PhD student at Wayne State University working on generative models, agentic workflows, and LLM safety for clinical and biomedical applications.",
   interests: [
     "Generative AI",
     "Trustworthy AI",

@@ -19,10 +19,10 @@ const events = (await getCollection("events")).sort((a, b) =>
 );
 
 const variantLabel = {
-  academic: "Refined Academic",
-  modern: "Modern AI Researcher",
-  editorial: "Editorial Research",
-  experimental: "Modern Experimental",
+  academic: "Trustworthy AI Lab",
+  modern: "Modern layout",
+  editorial: "Editorial layout",
+  experimental: "Experimental layout",
 }[variant];
 
 const linkFor = (pub: (typeof publications)[number]) =>
@@ -47,7 +47,7 @@ const emailCodepoints = profile.emailCodepoints.join(",");
       <div class="hero-copy">
         <p class="eyebrow">{variantLabel}</p>
         <h1>{profile.name}</h1>
-        <p class="hero-subtitle">Trustworthy generative AI, agentic workflows, and narrative systems for health.</p>
+        <p class="hero-subtitle">Generative AI, agentic workflows, and LLM safety in clinical settings.</p>
         <p class="hero-note">{profile.bio}</p>
         <div class="button-row">
           <a class="pill-link primary" href={sitePath(profile.cv)}>CV</a>
@@ -75,16 +75,15 @@ const emailCodepoints = profile.emailCodepoints.join(",");
     <div class="container bio-grid">
       <div>
         <p class="eyebrow">About</p>
-        <h2>Trustworthy generative and agentic AI for high-stakes healthcare.</h2>
+        <h2>Generative and agentic AI for clinical and biomedical work.</h2>
       </div>
       <div class="bio-list">
         <p>
           I am a Computer Science PhD student at Wayne State University in the Trustworthy AI
-          Lab with Dr. Dongxiao Zhu. I develop large language models and agentic AI systems for
-          clinical and biomedical settings—conversational risk assessment, LLM safety and privacy,
-          SDOH extraction from MIMIC, and a School of Nursing collaboration on an AI-assisted
-          health app for older adults. My goal is reliable, human-centered AI that supports
-          transparent, equitable decision-making in real care workflows.
+          Lab with Dr. Dongxiao Zhu. I build language models and agentic systems for clinical and
+          biomedical use. Recent projects include conversational COVID-19 risk assessment,
+          membership inference and LLM privacy, SDOH extraction from MIMIC, and a School of
+          Nursing collaboration on a health-tracking app for older adults.
         </p>
         <p>
           <strong>Education</strong> PhD and MS in Computer Science at Wayne State University;
@@ -102,7 +101,7 @@ const emailCodepoints = profile.emailCodepoints.join(",");
     <div class="container research-strip">
       <div>
         <p class="eyebrow">Research</p>
-        <h2>AI systems for high-stakes health and safety settings.</h2>
+        <h2>Generative AI, LLM safety, and health informatics.</h2>
       </div>
       <div class="chips">
         {profile.interests.map((interest) => <span class="chip">{interest}</span>)}
@@ -113,13 +112,13 @@ const emailCodepoints = profile.emailCodepoints.join(",");
   <section id="projects" class="section compact-section">
     <div class="container section-heading">
       <p class="eyebrow">Selected Work</p>
-      <h2>Current threads</h2>
+      <h2>Selected projects</h2>
     </div>
     <div class="container work-grid">
       {projects.slice(0, 3).map((project) => (
         <article class="work-card card">
           {project.data.images[0] && (
-            <img src={sitePath(project.data.images[0])} alt={`Image related to ${project.data.title}`} loading="lazy" />
+            <img src={sitePath(project.data.images[0])} alt={project.data.title} loading="lazy" />
           )}
           <div>
             <p class="meta">{project.data.status}</p>
@@ -168,13 +167,13 @@ const emailCodepoints = profile.emailCodepoints.join(",");
   <section id="activities" class="section compact-section">
     <div class="container section-heading">
       <p class="eyebrow">Activities</p>
-      <h2>Selected moments</h2>
+      <h2>Talks, awards, and teaching</h2>
     </div>
     <div class="container event-grid">
       {events.map((event) => (
         <article class="event-card card">
           {event.data.images[0] && (
-            <img src={sitePath(event.data.images[0])} alt={`Image related to ${event.data.title}`} loading="lazy" />
+            <img src={sitePath(event.data.images[0])} alt={event.data.title} loading="lazy" />
           )}
           <div>
             <p class="meta">{event.data.eventType}</p>
@@ -190,7 +189,7 @@ const emailCodepoints = profile.emailCodepoints.join(",");
     <div class="container footer-grid">
       <div>
         <p class="eyebrow">Contact</p>
-        <h2>Research, collaboration, and academic inquiries.</h2>
+        <h2>Email for research questions or collaboration.</h2>
       </div>
       <div class="button-row">
         <button class="pill-link primary contact-reveal" type="button" data-contact={emailCodepoints}>

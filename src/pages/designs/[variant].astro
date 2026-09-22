@@ -11,16 +11,16 @@ export function getStaticPaths() {
 
 const variant = Astro.params.variant as "academic" | "modern" | "editorial" | "experimental";
 const labels = {
-  academic: "Refined Academic",
-  modern: "Modern AI Researcher",
-  editorial: "Editorial Research",
-  experimental: "Modern Experimental",
+  academic: "Academic",
+  modern: "Modern",
+  editorial: "Editorial",
+  experimental: "Experimental",
 };
 ---
 
 <BaseLayout
   title={`${profile.name} | ${labels[variant]} Website Preview`}
-  description={`A ${labels[variant].toLowerCase()} homepage concept for ${profile.name}'s academic website.`}
+  description={`${labels[variant]} homepage layout preview for ${profile.name}.`}
 >
   <DesignHome variant={variant} />
 </BaseLayout>
