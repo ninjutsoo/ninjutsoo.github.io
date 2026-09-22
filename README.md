@@ -72,10 +72,10 @@ Replace `headshot.jpg`, generate a fresh optimized copy at `public/assets/images
 
 ## GitHub Pages Deployment
 
-The workflow in `.github/workflows/deploy.yml` builds the static Astro site on pushes to `main` and deploys `dist` to GitHub Pages. The configured production URL is:
+The workflow in `.github/workflows/deploy.yml` builds the static Astro site on pushes to `main` and deploys `dist` to GitHub Pages. For the clean root URL, the GitHub repository must be named `ninjutsoo.github.io`. The configured production URL is:
 
 ```text
-https://ninjutsoo.github.io/Personal-Website/
+https://ninjutsoo.github.io/
 ```
 
-GitHub Pages root subdomains are tied to the GitHub account or organization name. A cleaner public URL such as `aminroshani.com` can be connected later by adding a custom domain and updating `SITE_URL` / `BASE_PATH` in the workflow.
+A cleaner public URL such as `aminroshani.com` can be connected later by adding a custom domain and updating `SITE_URL` in the workflow.
