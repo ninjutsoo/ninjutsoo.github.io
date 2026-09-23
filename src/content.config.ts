@@ -54,10 +54,11 @@ const updates = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.string(),
-    summary: z.string(),
+    summary: z.string().optional(),
     tag: z.string().optional(),
     image: z.string().optional(),
     externalLink: z.string().url().optional(),
+    linkLabel: z.string().optional(),
   }),
 });
 
