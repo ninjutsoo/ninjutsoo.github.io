@@ -8,6 +8,5 @@ description: "Served as Graduate Teaching Assistant for Senior Capstone Project 
 relatedProject: "senior-capstone"
 images:
   - "/assets/images/senior-capstone-project-pic1.webp"
-  - "/assets/images/senior-capstone-project-pic2.webp"
 confidence: "Confirmed"
 ---

@@ -45,10 +45,13 @@ const emailCodepoints = profile.emailCodepoints.join(",");
   <section class="hero">
     <div class="container hero-grid">
       <div class="hero-copy">
-        <p class="eyebrow">{variantLabel}</p>
-        <h1>{profile.name}</h1>
-        <p class="hero-subtitle">Generative AI, agentic workflows, and LLM safety in clinical settings.</p>
-        <p class="hero-note">{profile.bio}</p>
+        {variant !== "academic" && <p class="eyebrow">{variantLabel}</p>}
+        <h1>
+          <span class="name-given">{profile.nameGiven}</span>
+          <span class="name-family">{profile.nameFamily}</span>
+        </h1>
+        <p class="hero-role">{profile.position}</p>
+        <p class="hero-subtitle">{profile.tagline}</p>
         <div class="button-row">
           <a class="pill-link primary" href={sitePath(profile.cv)}>CV</a>
           <button class="pill-link contact-reveal" type="button" data-contact={emailCodepoints}>
@@ -75,23 +78,15 @@ const emailCodepoints = profile.emailCodepoints.join(",");
     <div class="container bio-grid">
       <div>
         <p class="eyebrow">About</p>
-        <h2>Generative and agentic AI for clinical and biomedical work.</h2>
+        <h2>{profile.aboutHeadline}</h2>
       </div>
       <div class="bio-list">
+        <p>{profile.aboutParagraphs[0]}</p>
         <p>
-          I am a Computer Science PhD student at Wayne State University in the Trustworthy AI
-          Lab with Dr. Dongxiao Zhu. I build language models and agentic systems for clinical and
-          biomedical use. Recent projects include conversational COVID-19 risk assessment,
-          membership inference and LLM privacy, SDOH extraction from MIMIC, and a School of
-          Nursing collaboration on a health-tracking app for older adults.
+          <strong>Education</strong> {profile.aboutParagraphs[1]}
         </p>
         <p>
-          <strong>Education</strong> PhD and MS in Computer Science at Wayne State University;
-          BS in Computer Science from the University of Tehran.
-        </p>
-        <p>
-          <strong>Teaching</strong> Graduate teaching and instructor roles across programming,
-          web technology, senior capstone, and trustworthy AI.
+          <strong>Teaching</strong> {profile.aboutParagraphs[2]}
         </p>
       </div>
     </div>
@@ -275,20 +270,31 @@ const emailCodepoints = profile.emailCodepoints.join(",");
     align-items: center;
   }
 
+  .name-given,
+  .name-family {
+    display: block;
+  }
+
+  .name-given {
+    white-space: nowrap;
+  }
+
+  .hero-role {
+    max-width: 650px;
+    margin-bottom: 0.85rem;
+    color: var(--muted);
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    font-weight: 620;
+    line-height: 1.35;
+  }
+
   .hero-subtitle {
     max-width: 650px;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     color: var(--ink);
     font-size: clamp(1.35rem, 2.5vw, 2rem);
     font-weight: 520;
     line-height: 1.22;
-  }
-
-  .hero-note {
-    max-width: 560px;
-    margin-bottom: 1.5rem;
-    color: var(--muted);
-    font-size: 1.02rem;
   }
 
   .portrait-wrap {
