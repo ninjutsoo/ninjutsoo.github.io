@@ -1,6 +1,10 @@
 export const profile = {
   name: "Mohammad Amin Roshani",
+  nameGiven: "Mohammad Amin",
+  nameFamily: "Roshani",
   title: "Computer Science PhD student",
+  position:
+    "Graduate Research Assistant in the Trustworthy AI Lab, Wayne State University",
   affiliation: "Wayne State University",
   lab: "Trustworthy AI Lab",
   advisor: "Dongxiao Zhu",
@@ -10,6 +14,14 @@ export const profile = {
   headshot: "/assets/images/headshot.webp",
   bio:
     "PhD student at Wayne State University working on generative models, agentic workflows, and LLM safety for clinical and biomedical applications.",
+  tagline:
+    "Generative AI, agentic workflows, and LLM safety in clinical settings.",
+  aboutHeadline: "Generative and agentic AI for clinical and biomedical work.",
+  aboutParagraphs: [
+    "I am a Computer Science PhD student at Wayne State University in the Trustworthy AI Lab with Dr. Dongxiao Zhu. I build language models and agentic systems for clinical and biomedical use. Recent projects include conversational COVID-19 risk assessment, membership inference and LLM privacy, SDOH extraction from MIMIC, and a School of Nursing collaboration on a health-tracking app for older adults.",
+    "PhD and MS in Computer Science at Wayne State University; BS in Computer Science from the University of Tehran.",
+    "Graduate teaching and instructor roles across programming, web technology, senior capstone, and trustworthy AI.",
+  ],
   interests: [
     "Generative AI",
     "Trustworthy AI",

@@ -7,6 +7,5 @@ role: "Award recipient"
 description: "Received the Outstanding Graduate Teaching Assistant award from the Wayne State University Department of Computer Science for academic year 2025-2026."
 images:
   - "/assets/images/outstanding-gta.webp"
-  - "/assets/images/use-info-for-outstanding-gta.webp"
 confidence: "Confirmed"
 ---

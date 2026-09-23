@@ -20,8 +20,5 @@ publications:
 externalLinks:
   - label: "JMIR AI paper"
     url: "https://ai.jmir.org/2025/1/e67363/"
-images:
-  - "/assets/images/presenting-jmir-paper-at-industry-day-on-ai-pic1.webp"
-  - "/assets/images/presenting-jmir-paper-at-industry-day-on-ai-pic2.webp"
 featured: true
 ---
