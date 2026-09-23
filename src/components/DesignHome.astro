@@ -17,6 +17,15 @@ const projects = (await getCollection("projects")).sort((a, b) =>
 const events = (await getCollection("events")).sort((a, b) =>
   a.data.title.localeCompare(b.data.title),
 );
+const updates = (await getCollection("updates"))
+  .sort((a, b) => b.data.date.localeCompare(a.data.date))
+  .slice(0, 5);
+const formatUpdateDate = (isoDate: string) =>
+  new Date(`${isoDate}T12:00:00`).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 
 const variantLabel = {
   academic: "Trustworthy AI Lab",
@@ -73,6 +82,45 @@ const emailCodepoints = profile.emailCodepoints.join(",");
       </figure>
     </div>
   </section>
+
+  {updates.length > 0 && (
+    <section id="updates" class="section updates-band">
+      <div class="container section-heading">
+        <p class="eyebrow">Updates</p>
+        <h2>Recent news</h2>
+      </div>
+      <div class="container update-list">
+        {updates.map((item) => (
+          <article class="update-item">
+            {item.data.image && (
+              <img
+                class="update-logo"
+                src={sitePath(item.data.image)}
+                alt=""
+                width="120"
+                height="48"
+                loading="lazy"
+              />
+            )}
+            <div class="update-body">
+              <p class="update-meta">
+                {item.data.tag && <span>{item.data.tag}</span>}
+                <time datetime={item.data.date}>{formatUpdateDate(item.data.date)}</time>
+              </p>
+              <h3>
+                {item.data.externalLink ? (
+                  <a href={item.data.externalLink}>{item.data.title}</a>
+                ) : (
+                  item.data.title
+                )}
+              </h3>
+              <p>{item.data.summary}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
 
   <section id="about" class="section bio-band">
     <div class="container bio-grid">
@@ -484,6 +532,71 @@ const emailCodepoints = profile.emailCodepoints.join(",");
     object-fit: cover;
   }
 
+  .updates-band {
+    padding-block: clamp(28px, 4vw, 48px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .update-list {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .update-item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+    padding: 1rem 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .update-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .update-logo {
+    width: 7.5rem;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .update-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 0.75rem;
+    margin-bottom: 0.35rem;
+    color: var(--muted);
+    font-size: 0.88rem;
+    font-weight: 620;
+  }
+
+  .update-meta span {
+    color: var(--accent);
+  }
+
+  .update-body h3 {
+    margin-bottom: 0.35rem;
+    font-size: 1.05rem;
+  }
+
+  .update-body h3 a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .update-body h3 a:hover {
+    color: var(--accent);
+  }
+
+  .update-body p {
+    margin-bottom: 0;
+    color: var(--muted);
+    font-size: 0.96rem;
+    line-height: 1.55;
+    max-width: 62ch;
+  }
+
   .bio-band {
     border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
@@ -654,6 +767,14 @@ const emailCodepoints = profile.emailCodepoints.join(",");
 
     .hero-copy :global(.pill-link.primary) {
       box-shadow: 0 10px 24px color-mix(in srgb, var(--ink) 18%, transparent);
+    }
+
+    .update-item {
+      grid-template-columns: 1fr;
+    }
+
+    .update-logo {
+      width: 6.5rem;
     }
 
     h2 {

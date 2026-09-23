@@ -49,6 +49,18 @@ const projects = defineCollection({
   }),
 });
 
+const updates = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/updates" }),
+  schema: z.object({
+    title: z.string(),
+    date: z.string(),
+    summary: z.string(),
+    tag: z.string().optional(),
+    image: z.string().optional(),
+    externalLink: z.string().url().optional(),
+  }),
+});
+
 const events = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/events" }),
   schema: z.object({
@@ -67,4 +79,4 @@ const events = defineCollection({
   }),
 });
 
-export const collections = { publications, projects, events };
+export const collections = { publications, projects, events, updates };
