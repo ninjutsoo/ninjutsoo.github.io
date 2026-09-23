@@ -1,7 +1,7 @@
 ---
-import { getCollection, render } from "astro:content";
-import { profile } from "@/data/profile";
+import { getCollection } from "astro:content";
 import { sitePath } from "@/utils/paths";
+import { formatPostDate, postExcerpt, postHref, postTitle } from "@/utils/news";
 
 interface Props {
   limit?: number;
@@ -14,81 +14,33 @@ const entries = (await getCollection("updates")).sort((a, b) =>
   b.data.date.localeCompare(a.data.date),
 );
 const visible = limit ? entries.slice(0, limit) : entries;
-const posts = await Promise.all(
-  visible.map(async (entry) => ({
-    entry,
-    ...(await render(entry)),
-  })),
-);
-
-const formatPostDate = (isoDate: string) =>
-  new Date(`${isoDate}T12:00:00`).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-
-const estimateReadMinutes = (text: string) =>
-  Math.max(1, Math.round(text.trim().split(/\s+/).length / 180));
 ---
 
 <div class="news-feed">
-  {posts.length === 0 ? (
+  {visible.length === 0 ? (
     <p class="feed-empty">No posts yet. Add a markdown file under <code>src/content/updates/</code>.</p>
   ) : (
     <>
-    {posts.map(({ entry, Content }) => {
-      const readMinutes = estimateReadMinutes(entry.body ?? entry.data.summary ?? "");
-      return (
-        <article class="feed-card card">
-          <header class="feed-card-header">
-            <img
-              class="feed-avatar"
-              src={sitePath(profile.headshot)}
-              alt=""
-              width="80"
-              height="80"
-              loading="lazy"
-            />
-            <div class="feed-card-meta">
-              <p class="feed-author">{profile.name}</p>
-              <p class="feed-byline">
-                {entry.data.tag && <span class="feed-tag">{entry.data.tag}</span>}
-                <time datetime={entry.data.date}>{formatPostDate(entry.data.date)}</time>
-                <span class="feed-read">{readMinutes} min read</span>
-              </p>
-            </div>
-          </header>
-          <div class="feed-card-body">
-            {entry.data.title && <h3 class="feed-title">{entry.data.title}</h3>}
-            <div class="feed-prose">
-              <Content />
-            </div>
-            {entry.data.image && (
-              <figure class="feed-media">
-                <img
-                  src={sitePath(entry.data.image)}
-                  alt=""
-                  width="640"
-                  height="256"
-                  loading="lazy"
-                />
-              </figure>
-            )}
-            {entry.data.externalLink && (
-              <a class="feed-link" href={entry.data.externalLink}>
-                {entry.data.linkLabel ?? "Learn more"}
-              </a>
-            )}
-          </div>
+      {visible.map((entry) => (
+        <article class="feed-teaser card">
+          <p class="feed-meta">
+            <time datetime={entry.data.date}>{formatPostDate(entry.data.date)}</time>
+            {entry.data.tag && <span class="feed-tag">{entry.data.tag}</span>}
+          </p>
+          <h3 class="feed-title">
+            <a href={postHref(entry)}>{postTitle(entry)}</a>
+          </h3>
+          <p class="feed-excerpt">{postExcerpt(entry)}</p>
+          <a class="feed-continue" href={postHref(entry)} aria-label={`Read full post: ${postTitle(entry)}`}>
+            Read post
+          </a>
         </article>
-      );
-    })}
-    {showViewAll && limit !== undefined && entries.length > limit && (
-      <p class="feed-more">
-        <a class="text-link" href={sitePath("/news")}>All posts</a>
-      </p>
-    )}
+      ))}
+      {showViewAll && limit !== undefined && entries.length > limit && (
+        <p class="feed-more">
+          <a class="text-link" href={sitePath("/news")}>All posts</a>
+        </p>
+      )}
     </>
   )}
 </div>
@@ -96,44 +48,21 @@ const estimateReadMinutes = (text: string) =>
 <style>
   .news-feed {
     display: grid;
-    gap: 1rem;
+    gap: 0.85rem;
   }
 
-  .feed-card {
-    padding: 1.15rem 1.2rem 1.25rem;
+  .feed-teaser {
+    padding: 1rem 1.1rem 1.05rem;
   }
 
-  .feed-card-header {
-    display: flex;
-    gap: 0.75rem;
-    align-items: center;
-    margin-bottom: 0.85rem;
-  }
-
-  .feed-avatar {
-    width: 2.65rem;
-    height: 2.65rem;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-    box-shadow: 0 0 0 1px color-mix(in srgb, var(--line) 70%, transparent);
-  }
-
-  .feed-author {
-    margin: 0;
-    font-size: 0.95rem;
-    font-weight: 740;
-    line-height: 1.2;
-  }
-
-  .feed-byline {
+  .feed-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.35rem 0.55rem;
+    gap: 0.35rem 0.65rem;
     align-items: center;
-    margin: 0.15rem 0 0;
+    margin: 0 0 0.4rem;
     color: var(--muted);
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     font-weight: 620;
   }
 
@@ -142,64 +71,50 @@ const estimateReadMinutes = (text: string) =>
     font-weight: 720;
   }
 
-  .feed-tag::after {
+  .feed-tag::before {
     content: "·";
-    margin-left: 0.55rem;
+    margin-right: 0.65rem;
     color: var(--muted);
     font-weight: 500;
   }
 
-  .feed-read::before {
-    content: "·";
-    margin-right: 0.55rem;
-  }
-
   .feed-title {
-    margin: 0 0 0.45rem;
-    font-size: 1.08rem;
+    margin: 0 0 0.35rem;
+    font-size: 1.05rem;
     font-weight: 720;
-    line-height: 1.3;
+    line-height: 1.32;
   }
 
-  .feed-prose :global(p) {
-    margin: 0 0 0.65rem;
-    color: var(--ink);
-    font-size: 0.98rem;
-    line-height: 1.58;
+  .feed-title a {
+    color: inherit;
+    text-decoration: none;
   }
 
-  .feed-prose :global(p:last-child) {
-    margin-bottom: 0;
-  }
-
-  .feed-prose :global(strong) {
-    font-weight: 720;
-  }
-
-  .feed-media {
-    margin: 0.85rem 0 0;
-  }
-
-  .feed-media img {
-    display: block;
-    width: min(100%, 18rem);
-    height: auto;
-    border-radius: var(--radius, 8px);
-    border: 1px solid var(--line);
-    background: var(--panel);
-    padding: 0.45rem;
-  }
-
-  .feed-link {
-    display: inline-block;
-    margin-top: 0.85rem;
+  .feed-title a:hover {
     color: var(--accent);
-    font-size: 0.9rem;
+  }
+
+  .feed-excerpt {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+
+  .feed-continue {
+    display: inline-block;
+    margin-top: 0.65rem;
+    color: var(--accent);
+    font-size: 0.88rem;
     font-weight: 720;
     text-decoration: none;
   }
 
-  .feed-link:hover {
+  .feed-continue:hover {
     text-decoration: underline;
   }
 
