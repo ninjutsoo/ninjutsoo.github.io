@@ -228,6 +228,7 @@ const emailCodepoints = profile.emailCodepoints.join(",");
     }
 
     line.style.fontSize = `${best}px`;
+    return best;
   };
 
   const fitHeroNames = () => {
@@ -235,13 +236,18 @@ const emailCodepoints = profile.emailCodepoints.join(",");
 
     for (const heading of document.querySelectorAll<HTMLElement>(".hero-copy h1")) {
       const maxWidth = heading.clientWidth;
-      for (const line of heading.querySelectorAll<HTMLElement>(".name-given, .name-family")) {
-        if (!mobile || !maxWidth) {
-          line.style.fontSize = "";
-          continue;
-        }
-        fitHeroNameLine(line, maxWidth);
+      const given = heading.querySelector<HTMLElement>(".name-given");
+      const family = heading.querySelector<HTMLElement>(".name-family");
+      if (!given || !family) continue;
+
+      if (!mobile || !maxWidth) {
+        given.style.fontSize = "";
+        family.style.fontSize = "";
+        continue;
       }
+
+      const size = fitHeroNameLine(given, maxWidth);
+      family.style.fontSize = `${size}px`;
     }
   };
 
@@ -584,8 +590,18 @@ const emailCodepoints = profile.emailCodepoints.join(",");
       grid-template-columns: 1fr;
     }
 
-    .theme-editorial .portrait-wrap {
-      order: initial;
+    .portrait-wrap {
+      order: -1;
+      justify-self: center;
+      width: 75%;
+      max-width: 22rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .portrait-wrap img {
+      aspect-ratio: 1;
+      border-radius: 50%;
+      box-shadow: 0 14px 40px color-mix(in srgb, var(--ink) 14%, transparent);
     }
 
     .work-grid,
@@ -608,15 +624,11 @@ const emailCodepoints = profile.emailCodepoints.join(",");
       margin-inline: 0;
     }
 
-    /* Scale given name to span the full content width (Mohammad Amin stays one line). */
-    .name-given {
+    /* Given name spans full width on one line; family name uses the same size on the next line. */
+    .name-given,
+    .name-family {
       font-size: clamp(2.15rem, calc(100cqi / 6.8), var(--hero-max));
       letter-spacing: -0.016em;
-    }
-
-    .name-family {
-      font-size: clamp(2.15rem, calc(100cqi / 4.15), var(--hero-max));
-      letter-spacing: -0.01em;
     }
 
     .hero-copy .button-row {
