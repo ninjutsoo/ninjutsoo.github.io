@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import NewsFeed from "@/components/NewsFeed.astro";
 import { profile } from "@/data/profile";
 import { sitePath } from "@/utils/paths";
 
@@ -17,7 +18,6 @@ const projects = (await getCollection("projects")).sort((a, b) =>
 const events = (await getCollection("events")).sort((a, b) =>
   a.data.title.localeCompare(b.data.title),
 );
-
 const variantLabel = {
   academic: "Trustworthy AI Lab",
   modern: "Modern layout",
@@ -89,6 +89,19 @@ const emailCodepoints = profile.emailCodepoints.join(",");
           <strong>Teaching</strong> {profile.aboutParagraphs[2]}
         </p>
       </div>
+    </div>
+  </section>
+
+  <section id="news" class="section news-band">
+    <div class="container section-heading inline-heading">
+      <div>
+        <p class="eyebrow">News</p>
+        <h2>Latest posts</h2>
+      </div>
+      <a class="text-link" href={sitePath("/news")}>All posts</a>
+    </div>
+    <div class="container">
+      <NewsFeed limit={6} showViewAll />
     </div>
   </section>
 
@@ -482,6 +495,10 @@ const emailCodepoints = profile.emailCodepoints.join(",");
     width: 100%;
     height: 260px;
     object-fit: cover;
+  }
+
+  .news-band {
+    border-top: 1px solid var(--line);
   }
 
   .bio-band {
