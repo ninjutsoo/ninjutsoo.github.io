@@ -1,0 +1,43 @@
+---
+description: Git branches, deployment, and where to land changes for ninjutsoo.github.io
+alwaysApply: true
+---
+
+# Repository workflow
+
+## Branches
+
+- **`main`** — All **source** changes belong here: Astro app (`src/`), content collections, `public/` assets, config, `planning/`, `.github/workflows/`, docs, and Cursor rules.
+- **`master`** — **Production site output only** (built HTML/CSS/JS from CI). Do **not** edit `master` by hand or open PRs that target `master` for feature work.
+
+## How changes go live
+
+1. Branch from **`origin/main`**.
+2. Implement and verify locally (`pnpm build` at minimum).
+3. Open a pull request **into `main`**, get review, merge.
+4. On push/merge to **`main`**, `.github/workflows/deploy.yml` builds and publishes **`dist/`** to **`master`**, which GitHub Pages serves at `https://ninjutsoo.github.io/`.
+
+If it is not merged to **`main`**, it is **not** part of the deployed site (feature branches and open PRs are previews only).
+
+## What must land on `main` (examples)
+
+| Change | Location on `main` |
+|--------|-------------------|
+| Homepage / layout / styles | `src/components/`, `src/styles/` |
+| News posts | `src/content/updates/*.md` (+ images in `public/assets/images/`) |
+| Publications, projects, activities | `src/content/publications/`, `projects/`, `events/` |
+| Profile, links, CV path | `src/data/profile.ts`, `public/assets/documents/` |
+| New pages | `src/pages/` |
+| Deploy / site URL | `.github/workflows/deploy.yml` (`SITE_URL`, `BASE_PATH`) |
+
+## Do not
+
+- Commit built `dist/` to **`main`** (CI produces the site).
+- Copy-edit **`index.html`** on **`master`** instead of fixing **`src/`** on **`main`**.
+- Treat **`master`** as the development branch.
+
+## News feed
+
+- List teasers: homepage + `/news/` via `NewsFeed.astro`.
+- Full post: `/news/[slug]/` from the same markdown file.
+- Authoring notes: `planning/news-posts.md`.

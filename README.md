@@ -11,11 +11,20 @@ pnpm build
 pnpm preview
 ```
 
+## Source Control And Deployment
+
+- **`main`** — All website **source** changes (this repo’s Astro app, content, assets, workflows). Merge here to ship.
+- **`master`** — **Built site only**, updated automatically when **`main`** is pushed. Do not develop on `master`.
+- Feature branches should merge via pull request into **`main`**. Until merged, changes are not live on GitHub Pages.
+
+See `.cursor/rules/repository-workflow.mdc` for agent/contributor rules.
+
 ## Architecture
 
 - `src/content/publications/` contains publication records.
 - `src/content/projects/` contains research and teaching project records.
 - `src/content/events/` contains event, award, and activity records.
+- `src/content/updates/` contains news posts (homepage teasers and `/news/[slug]/` pages).
 - `src/data/profile.ts` contains stable profile, contact, education, teaching, and link data.
 - `src/components/DesignHome.astro` renders the four homepage concepts from shared content.
 - `public/assets/documents/` contains the public CV copy.
