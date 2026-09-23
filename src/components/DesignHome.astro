@@ -210,44 +210,6 @@ const emailCodepoints = profile.emailCodepoints.join(",");
     });
   }
 
-  const fitHeroNameLine = (line: HTMLElement, maxWidth: number) => {
-    line.style.fontSize = "";
-    let lo = 16;
-    let hi = parseFloat(getComputedStyle(line).fontSize) * 1.35;
-    let best = lo;
-
-    for (let step = 0; step < 28; step += 1) {
-      const mid = (lo + hi) / 2;
-      line.style.fontSize = `${mid}px`;
-      if (line.scrollWidth <= maxWidth) {
-        best = mid;
-        lo = mid;
-      } else {
-        hi = mid;
-      }
-    }
-
-    line.style.fontSize = `${best}px`;
-  };
-
-  const fitHeroNames = () => {
-    const mobile = window.matchMedia("(max-width: 900px)").matches;
-
-    for (const heading of document.querySelectorAll<HTMLElement>(".hero-copy h1")) {
-      const maxWidth = heading.clientWidth;
-      for (const line of heading.querySelectorAll<HTMLElement>(".name-given, .name-family")) {
-        if (!mobile || !maxWidth) {
-          line.style.fontSize = "";
-          continue;
-        }
-        fitHeroNameLine(line, maxWidth);
-      }
-    }
-  };
-
-  fitHeroNames();
-  window.addEventListener("resize", fitHeroNames, { passive: true });
-  document.fonts?.ready.then(fitHeroNames);
 </script>
 
 <style>
@@ -307,11 +269,6 @@ const emailCodepoints = profile.emailCodepoints.join(",");
     grid-template-columns: minmax(0, 1.05fr) minmax(300px, 0.75fr);
     gap: clamp(1.6rem, 6vw, 5rem);
     align-items: center;
-  }
-
-  .hero-copy {
-    container-type: inline-size;
-    container-name: hero-copy;
   }
 
   .name-given,
@@ -584,8 +541,18 @@ const emailCodepoints = profile.emailCodepoints.join(",");
       grid-template-columns: 1fr;
     }
 
-    .theme-editorial .portrait-wrap {
-      order: initial;
+    .portrait-wrap {
+      order: -1;
+      justify-self: center;
+      width: 75%;
+      max-width: 22rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .portrait-wrap img {
+      aspect-ratio: 1;
+      border-radius: 50%;
+      box-shadow: 0 14px 40px color-mix(in srgb, var(--ink) 14%, transparent);
     }
 
     .work-grid,
@@ -606,17 +573,13 @@ const emailCodepoints = profile.emailCodepoints.join(",");
       width: 100%;
       max-width: none;
       margin-inline: 0;
+      font-size: clamp(2.15rem, 7vw, var(--hero-max));
     }
 
-    /* Scale given name to span the full content width (Mohammad Amin stays one line). */
-    .name-given {
-      font-size: clamp(2.15rem, calc(100cqi / 6.8), var(--hero-max));
-      letter-spacing: -0.016em;
-    }
-
+    .name-given,
     .name-family {
-      font-size: clamp(2.15rem, calc(100cqi / 4.15), var(--hero-max));
-      letter-spacing: -0.01em;
+      font-size: inherit;
+      letter-spacing: -0.014em;
     }
 
     .hero-copy .button-row {
