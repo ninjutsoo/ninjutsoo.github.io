@@ -2,7 +2,7 @@
 title: "IEEE Big Data 2026 program committee"
 date: "2025-09-23"
 tag: "Service"
-summary: "Serving on the IEEE Big Data 2026 program committee."
+summary: "Serving on the IEEE Big Data 2026 program committee in Phoenix; reviews due October 14."
 image: "/assets/images/ieee-bigdata-2026.png"
 externalLink: "https://bigdataieee.org/BigData2026/index.html"
 linkLabel: "Conference site"

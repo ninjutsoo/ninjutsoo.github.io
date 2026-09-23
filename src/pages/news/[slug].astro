@@ -1,0 +1,133 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getCollection, render } from "astro:content";
+import { profile } from "@/data/profile";
+import { sitePath } from "@/utils/paths";
+import { formatPostDate, postTitle } from "@/utils/news";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("updates");
+  return Promise.all(
+    posts.map(async (post) => ({
+      params: { slug: post.id },
+      props: { post, ...(await render(post)) },
+    })),
+  );
+}
+
+const { post, Content } = Astro.props;
+const title = postTitle(post);
+const pageTitle = `${title} | News | ${profile.name}`;
+const description = post.data.summary ?? `${title} — news from ${profile.name}.`;
+---
+
+<BaseLayout title={pageTitle} description={description}>
+  <article class="news-post section">
+    <div class="container news-post-inner">
+      <a class="news-back text-link" href={sitePath("/news")}>← All news</a>
+      <header class="news-post-header">
+        <p class="news-post-meta">
+          <time datetime={post.data.date}>{formatPostDate(post.data.date)}</time>
+          {post.data.tag && <span>{post.data.tag}</span>}
+        </p>
+        <h1>{title}</h1>
+      </header>
+      <div class="news-post-body">
+        <Content />
+      </div>
+      {post.data.image && (
+        <figure class="news-post-media">
+          <img src={sitePath(post.data.image)} alt="" width="640" height="256" loading="lazy" />
+        </figure>
+      )}
+      {post.data.externalLink && (
+        <p class="news-post-link">
+          <a href={post.data.externalLink}>{post.data.linkLabel ?? "Learn more"}</a>
+        </p>
+      )}
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .news-post-inner {
+    max-width: 42rem;
+  }
+
+  .news-back {
+    display: inline-block;
+    margin-bottom: 1.25rem;
+    font-size: 0.92rem;
+  }
+
+  .news-post-header h1 {
+    margin: 0;
+    font-size: clamp(1.65rem, 4.5vw, 2.25rem);
+    font-weight: 760;
+    line-height: 1.12;
+  }
+
+  .news-post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.65rem;
+    margin: 0 0 0.55rem;
+    color: var(--muted);
+    font-size: 0.88rem;
+    font-weight: 620;
+  }
+
+  .news-post-meta span {
+    color: var(--accent);
+    font-weight: 720;
+  }
+
+  .news-post-meta span::before {
+    content: "·";
+    margin-right: 0.65rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .news-post-body :global(p) {
+    margin: 0 0 1rem;
+    font-size: 1.02rem;
+    line-height: 1.65;
+  }
+
+  .news-post-body :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .news-post-body :global(strong) {
+    font-weight: 720;
+  }
+
+  .news-post-media {
+    margin: 1.35rem 0 0;
+  }
+
+  .news-post-media img {
+    display: block;
+    width: min(100%, 20rem);
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    padding: 0.5rem;
+  }
+
+  .news-post-link {
+    margin: 1.25rem 0 0;
+  }
+
+  .news-post-link a {
+    color: var(--accent);
+    font-weight: 720;
+    text-decoration: none;
+  }
+
+  .news-post-link a:hover {
+    text-decoration: underline;
+  }
+</style>
