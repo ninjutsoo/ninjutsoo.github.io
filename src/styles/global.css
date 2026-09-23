@@ -63,6 +63,12 @@ img {
   margin-inline: auto;
 }
 
+@media (max-width: 900px) {
+  .container {
+    width: min(1160px, calc(100% - 28px));
+  }
+}
+
 .section {
   padding-block: clamp(44px, 7vw, 88px);
 }
