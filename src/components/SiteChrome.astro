@@ -2,13 +2,16 @@
 import { profile } from "@/data/profile";
 import { sitePath } from "@/utils/paths";
 
+const home = sitePath("/");
+const section = (id: string) => `${home}#${id}`;
+
 const navItems = [
-  ["About", "#about"],
+  ["About", section("about")],
   ["News", sitePath("/news")],
-  ["Research", "#research"],
-  ["Projects", "#projects"],
-  ["Publications", "#publications"],
-  ["Activities", "#activities"],
+  ["Research", section("research")],
+  ["Projects", section("projects")],
+  ["Publications", section("publications")],
+  ["Activities", section("activities")],
 ];
 ---
 

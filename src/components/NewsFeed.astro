@@ -6,9 +6,11 @@ import { formatPostDate, postExcerpt, postHref, postTitle } from "@/utils/news";
 interface Props {
   limit?: number;
   showViewAll?: boolean;
+  /** Minimal list for the dedicated /news page (no excerpt or “Read post”). */
+  compact?: boolean;
 }
 
-const { limit, showViewAll = false } = Astro.props;
+const { limit, showViewAll = false, compact = false } = Astro.props;
 
 const entries = (await getCollection("updates")).sort((a, b) =>
   b.data.date.localeCompare(a.data.date),
@@ -46,10 +48,14 @@ const visible = limit ? entries.slice(0, limit) : entries;
                 <h3 class="feed-title">
                   <a href={href}>{title}</a>
                 </h3>
-                <p class="feed-excerpt">{postExcerpt(entry)}</p>
-                <a class="feed-continue" href={href} aria-label={`Read full post: ${title}`}>
-                  Read post
-                </a>
+                {!compact && (
+                  <>
+                    <p class="feed-excerpt">{postExcerpt(entry)}</p>
+                    <a class="feed-continue" href={href} aria-label={`Read full post: ${title}`}>
+                      Read post
+                    </a>
+                  </>
+                )}
               </div>
             </div>
           </article>
