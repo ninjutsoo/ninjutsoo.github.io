@@ -48,7 +48,7 @@ Primary sources inspected: `resume.pdf`, `links.md`, `headshot.jpg`, and files i
 
 - Automatic Calibration for Membership Inference Attack on Large Language Models, Jul 2025, Published. Source: `resume.pdf`; verified with arXiv, ECAI accepted paper list, DBLP, and IOS Press DOI.
 - Generative Large Language Model-Powered Conversational AI App for Personalized Risk Assessment: Case Study in COVID-19, Feb 2025, Published. Source: `resume.pdf`; verified with JMIR/PubMed/PMC.
-- Learning to poison large language models during instruction tuning, Feb 2024, Under Review. Source: `resume.pdf`; latest arXiv title is "Learning to Poison Large Language Models for Downstream Manipulation."
+- Learning to Poison Large Language Models for Downstream Manipulation, Oct 2026, Accepted (short paper) at IEEE BigData 2026. Source: acceptance email BigD467; arXiv https://arxiv.org/abs/2402.13459.
 
 ## 10. Education
 
